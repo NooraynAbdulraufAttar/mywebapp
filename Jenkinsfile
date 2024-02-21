@@ -56,23 +56,37 @@ pipeline
             }
         }
         
-         stage('docker build')
-        {
-          steps
-          {
-           withCredentials([usernamePassword(credentialsId: 'tuktuka-docker', passwordVariable: 'pwd', usernameVariable: 'uname')])
-               {
+        //  stage('docker build')
+        // {
+        //   steps
+        //   {
+        //    withCredentials([usernamePassword(credentialsId: 'tuktuka-docker', passwordVariable: 'pwd', usernameVariable: 'uname')])
+        //        {
             
-              sh 'docker login -u ${uname} -p dckr_pat_7rSmxdZl2f520cBVsYAUQXovqos'
-              sh 'docker build -t tuktuka/jenkinsdemog .'
-              sh 'docker push tuktuka/jenkinsdemog'
+        //       sh 'docker login -u ${uname} -p dckr_pat_7rSmxdZl2f520cBVsYAUQXovqos'
+        //       sh 'docker build -t tuktuka/jenkinsdemog .'
+        //       sh 'docker push tuktuka/jenkinsdemog'
                 
-                }
+        //         }
                  
           
+        //     }
+        // }
+
+
+
+
+        stage('SonarQube Analysis') 
+        {
+        steps
+        {
+        withSonarQubeEnv('sonar') 
+            {
+                sh "mvn clean verify sonar:sonar -Dsonar.projectKey=pro1 -Dsonar.projectName='pro1'"
             }
         }
-            
+        }    
+    
     }    
     
         
